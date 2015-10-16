@@ -12,19 +12,16 @@ export default class Editor2 extends Component{
 	   //  this.displayName = 'RTEditor',
   		// //this.mixins = [selection, keyhandlers, headings, formatting],
   		// this.topLevelNodes = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol'],
-	   //  this.state = this.getInitialState();
-	    console.log('this.state = ',this.state);
+	    //this.state = this.getInitialState();
+		let rootKey = 'root';
+		let modifiedData = this.addKeysToTags(this.props.data, rootKey);
+		this.state = {
+			content:modifiedData,
+			rootKey: rootKey
+		}
+	    //console.log('this.state = ',this.state);
 	}
-	getInitialState(){
-		let rootKey, modifiedData, state;
-	    rootKey = 'root';
-	    modifiedData = this.addKeysToTags(this.props.data, rootKey);
-	    state = {
-	      content: modifiedData,
-	      rootKey: rootKey
-	    };
-	    return state;
-	}
+
 	addKeysToTags(content,previousLevel){
 	  	var item, this$ = this;
 	    previousLevel = previousLevel;
@@ -39,6 +36,7 @@ export default class Editor2 extends Component{
 	      return item;
 	    });
 	    content['key'] = previousLevel;
+		//console.log('addKeysToTags content = ',content);
 	    return content;
 	}
 	convertToJson(){
@@ -76,6 +74,7 @@ export default class Editor2 extends Component{
 	    });
 	  }
 	  onKeyPress(event){
+	    console.log('enter onKeyPress. this = ',this);
 	    var content, selectionModel;
 	    content = this.state.content;
 	    event.preventDefault();
@@ -96,10 +95,12 @@ export default class Editor2 extends Component{
 	        }
 	      }
 	    } else {
+		  console.log('enter onKeyPress handleCharacterChange ');
 	      return this.handleCharacterChange(true, event.key);
 	    }
 	  }
 	  onKeyDown(event){
+	  console.log('enter onKeyPress');
 	    var content;
 	    console.log(event.key);
 	    content = this.state.content;
@@ -132,23 +133,43 @@ export default class Editor2 extends Component{
 	  renderJsonToHtmlTwo(node){
 	    var this$ = this;
 	    if (node.childNodes && node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
-	      return ReactDOM[node.tagName]({
+	      return React.createFactory(node.tagName)({
 	        'data-tag-key': node.key
 	      }, node.childNodes[0].textContent);
 	    } else if (node.tagName === 'br') {
-	      return ReactDOM[node.tagName](null);
+	      return React.createFactory(node.tagName)(null);
 	    } else {
-	      return ReactDOM[node.tagName]({
+	      return React.createFactory(node.tagName)({
 	        'data-tag-key': node.key
 	      }, node.childNodes.map(function(childNode){
 	        return this$.renderJsonToHtmlTwo(childNode);
 	      }));
 	    }
 	  }
-
+	  
 	  render(){
-	  	let{div,p,button} = ReactDOM;
-	  	console.log(' in render div =',div);
+		return <div className='react-rte'>
+				<div className='rte-toolbar'>
+					<button onClick={::this.applyHeadingOne}>H1</button>
+					<button onClick={::this.applyHeadingTwo}>H2</button>
+					<button onClick={::this.applyHeadingThree}>H3</button>
+					<button onClick={::this.applyHeadingFour}>H4</button>
+					<button onClick={::this.applyBoldFormat}>B</button>
+					<button onClick={::this.applyItalicFormat}>I</button>
+					<button onClick={::this.applyUnderlineFormat}>U</button>
+					<button onClick={::this.applyStriketroughFormat}>S</button>
+				</div>
+				<div id='contenteditable' style={{'white-space':'pre'}} contentEditable='true' 
+					onKeyPress={::this.onKeyPress} onKeyDown={::this.onKeyDown}>
+				</div>
+			   </div>;
+	    
+	  }
+	  render2(){
+		let div = React.createFactory('div');
+		let p = React.createFactory('p');
+		let button = React.createFactory('button');
+	  	console.log(' in render div2 =',div);
 	    return div({
 	      className: 'react-rte'
 	    }, div({
@@ -185,13 +206,13 @@ export default class Editor2 extends Component{
 	        display: 'block'
 	      }
 	    }, this.state.content.childNodes.map(function(item){
-	      return ReactDOM[item.tagName]({
+	      return React.createFactory(item.tagName)({
 	        'data-tag-key': item.key
 	      }, item.childNodes.map(function(cn){
 	        if (cn.nodeType === 3) {
 	          return cn.textContent;
 	        } else {
-	          return ReactDOM[cn.tagName]({
+	          return React.createFactory(cn.tagName)({
 	            'data-tag-key': cn.key
 	          }, cn.childNodes.map(function(cn2){
 	            if (cn2.nodeType === 3) {
