@@ -1,20 +1,39 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 
-// import headings from './heading';
-// import keyhandlers from './keyhandlers';
-// import selection from './selection';
-// import formatting from './formatting';
+import heading from './heading';
+// import {applyHeadingOne,applyHeadingTwo,applyHeadingThree,applyHeadingFour,applyHeading,getTopLevelSelectionNode} from './heading';
+import keyhandlers from './keyhandlers';
+import selection from './selection';
+import formatting from './formatting';
 
 export default class Editor2 extends Component{
 	constructor(props) {
 	    super(props);
 	   //  this.displayName = 'RTEditor',
-  		// //this.mixins = [selection, keyhandlers, headings, formatting],
+  		//this.mixins = [selection, keyhandlers, headings, formatting];
   		// this.topLevelNodes = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol'],
 	    //this.state = this.getInitialState();
 		let rootKey = 'root';
 		let modifiedData = this.addKeysToTags(this.props.data, rootKey);
+		
+		//let {applyHeadingOne,applyHeadingTwo,applyHeadingThree,applyHeadingFour,applyHeading,getTopLevelSelectionNode} = heading;
+		// this.applyHeadingOne = applyHeadingOne;
+		// this.applyHeadingTwo = applyHeadingTwo;
+		// this.applyHeadingThree = applyHeadingThree;
+		// this.applyHeadingFour = applyHeadingFour;
+		// this.applyHeadingOne = applyHeadingOne;
+		console.log('heading = ',heading);
+		var target = { a: 1, b: 1 };
+
+		var source1 = { b: 2, c: 2 };
+		var source2 = { c: 3 };
+		console.log('Object.assign = ',Object.assign);
+		Object.assign(target, source1, source2);
+		console.log('target = ',target);
+		//Object.assign({},heading);
+		console.log('applyHeadingOne = ',applyHeadingOne);
+		console.log('this.applyHeadingOne = ',this.applyHeadingOne);
 		this.state = {
 			content:modifiedData,
 			rootKey: rootKey
@@ -148,16 +167,19 @@ export default class Editor2 extends Component{
 	  }
 	  
 	  render(){
+	  	console.log('applyHeadingOne = ',applyHeadingOne);
 		return <div className='react-rte'>
 				<div className='rte-toolbar'>
-					<button onClick={::this.applyHeadingOne}>H1</button>
+					<button onClick={this.applyHeadingOne.bind(this)}>H1</button>
 					<button onClick={::this.applyHeadingTwo}>H2</button>
 					<button onClick={::this.applyHeadingThree}>H3</button>
 					<button onClick={::this.applyHeadingFour}>H4</button>
+				{/**
 					<button onClick={::this.applyBoldFormat}>B</button>
 					<button onClick={::this.applyItalicFormat}>I</button>
 					<button onClick={::this.applyUnderlineFormat}>U</button>
 					<button onClick={::this.applyStriketroughFormat}>S</button>
+				**/}
 				</div>
 				<div id='contenteditable' style={{'white-space':'pre'}} contentEditable='true' 
 					onKeyPress={::this.onKeyPress} onKeyDown={::this.onKeyDown}>
