@@ -51,8 +51,29 @@ export default class Editor extends Component{
 	render(){
 		return  (
 			<div className='quill-wrapper'>
-					<ReactQuill className='editor' theme='snow' toolbar={this.toolbarItems} value={this.state.value} />
+				
+
+				<ReactQuill className='editor' theme='snow' toolbar={this.toolbarItems} value={this.state.value} 
+					onChange={::this.onChange}/>
+{/**
+				<ReactQuill>
+			        <ReactQuill.Toolbar key="toolbar"
+			                            ref="toolbar"
+			                            items={ReactQuill.Toolbar.defaultItems} />
+			        <div key="editor"
+			             ref="editor"
+			             className="quill-contents"
+			             dangerouslySetInnerHTML={{__html:this.getEditorContents()}} />
+		      	</ReactQuill>
+**/}
 			</div>);
+	}
+
+	getEditorContents(){
+		return this.state.value;
+	}
+	onChange(value, delta, source) {
+		console.log('new value = ',value,delta,source);
 	}
 
 }
