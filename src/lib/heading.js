@@ -17,8 +17,9 @@ module.exports = {
   applyHeading: function(headingLevel){
     var selection, selectionAnchorNode, selectionExtentNode, startIndex, endIndex, swap, childNodesConfig, i$, i, config, content;
     selection = window.getSelection();
+    console.log('selection = ',selection);
     selectionAnchorNode = this.getTopLevelSelectionNode(selection.anchorNode);
-    selectionExtentNode = this.getTopLevelSelectionNode(selection.extentNode);
+    selectionExtentNode = this.getTopLevelSelectionNode(selection.extentNode || selection.focusNode);
     startIndex = selectionAnchorNode.getAttribute('data-tag-key').split('.')[1] * 1;
     endIndex = selectionExtentNode.getAttribute('data-tag-key').split('.')[1] * 1;
     if (startIndex > endIndex) {

@@ -387,10 +387,11 @@ module.exports = {
     return this.updateState(content, tagKey, selectionStart);
   },
   handleCharacterChange: function(isAppending, character){
+   console.log('enter handleCharacterChange()  ');
     var selectionModel, content;
     selectionModel = this.getSelectionModel();
     content = this.state.content;
-    console.log(selectionModel);
+    console.log('handleCharacterChange() selectionModel = ',selectionModel);
     if (selectionModel.multilineSelection) {
       if (selectionModel.normalTextOnly) {
         return this.handleCharacterChangeForMultilineNormalText(selectionModel, isAppending, character);

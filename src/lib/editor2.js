@@ -23,16 +23,11 @@ export default class Editor2 extends Component{
 		// this.applyHeadingThree = applyHeadingThree;
 		// this.applyHeadingFour = applyHeadingFour;
 		// this.applyHeadingOne = applyHeadingOne;
-		console.log('heading = ',heading);
-		var target = { a: 1, b: 1 };
-
-		var source1 = { b: 2, c: 2 };
-		var source2 = { c: 3 };
-		console.log('Object.assign = ',Object.assign);
-		Object.assign(target, source1, source2);
-		console.log('target = ',target);
-		//Object.assign({},heading);
-		console.log('applyHeadingOne = ',applyHeadingOne);
+		Object.assign(this,heading);
+		Object.assign(this,keyhandlers);
+		Object.assign(this,selection);
+		Object.assign(this,formatting);
+		//console.log('applyHeadingOne = ',applyHeadingOne);
 		console.log('this.applyHeadingOne = ',this.applyHeadingOne);
 		this.state = {
 			content:modifiedData,
@@ -119,7 +114,7 @@ export default class Editor2 extends Component{
 	    }
 	  }
 	  onKeyDown(event){
-	  console.log('enter onKeyPress');
+	    console.log('enter onKeyPress this = ',this);
 	    var content;
 	    console.log(event.key);
 	    content = this.state.content;
@@ -167,23 +162,44 @@ export default class Editor2 extends Component{
 	  }
 	  
 	  render(){
-	  	console.log('applyHeadingOne = ',applyHeadingOne);
+	  	//console.log('applyHeadingOne = ',applyHeadingOne);
 		return <div className='react-rte'>
 				<div className='rte-toolbar'>
 					<button onClick={this.applyHeadingOne.bind(this)}>H1</button>
 					<button onClick={::this.applyHeadingTwo}>H2</button>
 					<button onClick={::this.applyHeadingThree}>H3</button>
 					<button onClick={::this.applyHeadingFour}>H4</button>
-				{/**
+				
 					<button onClick={::this.applyBoldFormat}>B</button>
 					<button onClick={::this.applyItalicFormat}>I</button>
 					<button onClick={::this.applyUnderlineFormat}>U</button>
 					<button onClick={::this.applyStriketroughFormat}>S</button>
-				**/}
+				
 				</div>
 				<div id='contenteditable' style={{'white-space':'pre'}} contentEditable='true' 
 					onKeyPress={::this.onKeyPress} onKeyDown={::this.onKeyDown}>
+					{this.renderJsonToHtmlTwo(this.state.content)}
 				</div>
+				<button onClick={::this.convertToJson}>Convert</button>
+			   	<div className='result' style={{'display':'block'}}>{
+			   		this.state.content.childNodes.map(function(item){
+				      return React.createFactory(item.tagName)({
+				        'data-tag-key': item.key
+				      }, item.childNodes.map(function(cn){
+				        if (cn.nodeType === 3) {
+				          return cn.textContent;
+				        } else {
+				          return React.createFactory(cn.tagName)({
+				            'data-tag-key': cn.key
+				          }, cn.childNodes.map(function(cn2){
+				            if (cn2.nodeType === 3) {
+				              return cn2.textContent;
+				            }
+				          }));
+				        }
+				      }));
+				    })
+			   	}</div>
 			   </div>;
 	    
 	  }

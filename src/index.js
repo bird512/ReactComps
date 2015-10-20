@@ -1,7 +1,13 @@
+import 'babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AutoSizeTextarea from './comp/AutoSizeTextarea';
 import Editor2 from './lib/editor2';
+import ReactQuill  from 'react-quill';
+//import '../assets/css/quill.base.css';
+import '../assets/css/quill.snow.css';
+import '../assets/css/style.css';
+import Editor from './comp/Editor';
 
 // do this to enable React tools chrome plugin
 window.React = React;
@@ -99,5 +105,6 @@ let testData = {
   tagName: 'div'
 };
 //ReactDOM.render( < AutoSizeTextarea defaultValue = 'test value' / > , document.getElementById('content'));
-ReactDOM.render( < Editor2 data={testData}/ > , document.getElementById('content'));
-//ReactDOM.render( < editor3 defaultValue = 'test value'/ > , document.getElementById('content'));
+//ReactDOM.render( <ReactQuill className='editor'/> , document.getElementById('content'));
+//ReactDOM.render( <div><ReactQuill className='editor' theme='snow'/> aa <Editor /></div>, document.getElementById('content'));
+ReactDOM.render( <Editor /> , document.getElementById('content'));
